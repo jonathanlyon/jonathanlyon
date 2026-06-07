@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"journal">;
+  index: number;
+}
+
+const { entry, index } = Astro.props;
+const { data } = entry;
+const label = data.format.replace("-", " ");
+const href = `/journal/${entry.id}/`;
+const date = data.publishedAt.toLocaleDateString("en-NZ", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+---
+
+{
+  data.format === "fragment" ? (
+    <a
+      class="entry-card entry-card--fragment"
+      href={href}
+      data-format={data.format}
+      data-themes={data.themes.join("|")}
+    >
+      <div class="fragment-inner">
+        <div class="entry-meta">{label} · {date}</div>
+        <blockquote>“{data.quote ?? data.title}”</blockquote>
+        <div class="rule-link">Read the fragment <span>→</span></div>
+      </div>
+    </a>
+  ) : (
+    <a
+      class="entry-card"
+      href={href}
+      data-format={data.format}
+      data-themes={data.themes.join("|")}
+    >
+      <div class="entry-image-wrap">
+        <img src={data.cover} alt={data.coverAlt} loading={index < 2 ? "eager" : "lazy"} />
+        <span class="entry-index">{String(index + 1).padStart(2, "0")}</span>
+      </div>
+      <div class="entry-body">
+        <div class="entry-meta">
+          {label}<br />
+          {date}
+        </div>
+        <div class="entry-copy">
+          <h3>{data.title}</h3>
+          <p>{data.summary}</p>
+        </div>
+      </div>
+    </a>
+  )
+}

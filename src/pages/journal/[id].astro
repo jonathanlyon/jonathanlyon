@@ -1,0 +1,112 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("journal", ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+const label = data.format.replace("-", " ");
+const date = data.publishedAt.toLocaleDateString("en-NZ", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+function getEmbedUrl(url?: string) {
+  if (!url) return null;
+
+  const parsed = new URL(url);
+  if (parsed.hostname.includes("youtube.com")) {
+    const id = parsed.searchParams.get("v");
+    return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+  }
+
+  if (parsed.hostname === "youtu.be") {
+    const id = parsed.pathname.replace("/", "");
+    return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+  }
+
+  if (parsed.hostname.includes("vimeo.com")) {
+    const id = parsed.pathname.split("/").filter(Boolean).pop();
+    return id ? `https://player.vimeo.com/video/${id}` : null;
+  }
+
+  return null;
+}
+
+const embedUrl = getEmbedUrl(data.videoUrl);
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  image={data.cover}
+  solidHeader
+>
+  <article>
+    <header class="article-hero shell">
+      <div class="article-hero-grid">
+        <div>
+          <p class="eyebrow">{label} · {date}</p>
+        </div>
+        <div>
+          <h1 class="display">{data.title}</h1>
+          <p class="article-summary">{data.summary}</p>
+        </div>
+      </div>
+    </header>
+    <img class="article-cover" src={data.cover} alt={data.coverAlt} />
+    <div class="article-layout shell">
+      <aside class="article-sidebar">
+        {
+          data.sample && (
+            <>
+              <span>Example entry</span><br />
+            </>
+          )
+        }
+        {data.themes.join(" · ")}
+      </aside>
+      <div class="prose">
+        <Content />
+      </div>
+      <aside class="article-sidebar">
+        <a href="/journal/">← Return to journal</a>
+      </aside>
+    </div>
+    {
+      embedUrl && (
+        <div class="article-video shell">
+          <iframe
+            src={embedUrl}
+            title={`Video for ${data.title}`}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        </div>
+      )
+    }
+    {
+      data.gallery.length > 0 && (
+        <div class="article-gallery shell">
+          {data.gallery.map((image, index) => (
+            <img
+              src={image}
+              alt={`${data.title}, photograph ${index + 1}`}
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )
+    }
+  </article>
+</BaseLayout>

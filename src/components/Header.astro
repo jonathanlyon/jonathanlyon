@@ -1,0 +1,51 @@
+---
+interface Props {
+  solid?: boolean;
+}
+
+const { solid = false } = Astro.props;
+---
+
+<header class:list={["site-header", { "is-solid": solid }]}>
+  <div class="header-inner shell">
+    <a class="wordmark" href="/">
+      <strong>Jonathan Lyon</strong>
+      <small>Writing · Photography · A life being made</small>
+    </a>
+    <nav class="site-nav" id="site-navigation" aria-label="Main navigation">
+      <a href="/journal/">Journal</a>
+      <a href="/#photography">Photography</a>
+      <a href="/#about">About</a>
+      <a href="https://thenarrativewitness.com">The Narrative Witness ↗</a>
+    </nav>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-label="Open navigation"
+      aria-expanded="false"
+      aria-controls="site-navigation"
+    >
+      <span aria-hidden="true">☰</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const nav = document.querySelector<HTMLElement>("#site-navigation");
+
+  button?.addEventListener("click", () => {
+    const open = nav?.classList.toggle("is-open") ?? false;
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+    const icon = button.querySelector("span");
+    if (icon) icon.textContent = open ? "×" : "☰";
+  });
+
+  nav?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("is-open");
+      button?.setAttribute("aria-expanded", "false");
+    });
+  });
+</script>

@@ -1,0 +1,122 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import EntryCard from "../components/EntryCard.astro";
+
+const entries = (await getCollection("journal", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <img
+      class="hero-image"
+      src="/images/journal/reflected-self.jpg"
+      alt="A layered black and white self-portrait seen through rain and reflections"
+    />
+    <div class="hero-content shell">
+      <div class="hero-copy">
+        <p class="eyebrow">A personal journal from Aotearoa New Zealand</p>
+        <h1 class="display">Jonathan<br />Lyon</h1>
+        <p class="hero-intro">
+          Writer, photographer, father, cabin builder, reluctant mechanic and
+          full-time student of the life that keeps happening between plans.
+        </p>
+      </div>
+      <div class="hero-foot">
+        <div class="hero-themes">
+          <span>Writing</span>
+          <span>Making</span>
+          <span>Fatherhood</span>
+          <span>Land</span>
+          <span>Photography</span>
+        </div>
+        <a class="rule-link" href="#journal">Enter the journal <span>↓</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div class="manifesto-grid shell">
+      <p class="eyebrow">Many lives, one record</p>
+      <div>
+        <blockquote>
+          A place for the man writing a book, fixing a tractor, building a cabin
+          and trying to be more fully present for the life already here.
+        </blockquote>
+        <p class="manifesto-copy">
+          This is not a record of expertise. It is a record of attention:
+          essays, field notes, photographs, fragments and moments from a life
+          that has taken the long way around.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="journal-section shell" id="journal">
+    <div class="section-head">
+      <p class="eyebrow">Recently observed</p>
+      <h2 class="display">From the journal</h2>
+    </div>
+    <div class="journal-grid">
+      {entries.map((entry, index) => <EntryCard entry={entry} index={index} />)}
+    </div>
+    <div style="margin-top: 4rem; text-align: right;">
+      <a class="rule-link" href="/journal/">View the complete journal <span>→</span></a>
+    </div>
+  </section>
+
+  <section class="photo-band" id="photography">
+    <img
+      src="/images/journal/still-water.jpg"
+      alt="Mountains and clouds reflected in still lake water"
+      loading="lazy"
+    />
+    <div class="photo-band-copy shell">
+      <p class="eyebrow">The photographic record</p>
+      <div>
+        <h2 class="display">Looking is another way of writing things down.</h2>
+        <a class="rule-link" href="/journal/?format=photo-story">
+          View photo stories <span>→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section" id="about">
+    <div class="about-grid shell">
+      <figure class="about-portrait">
+        <img
+          src="/images/jonathan-portrait.jpg"
+          alt="Black and white portrait of Jonathan Lyon"
+          loading="lazy"
+        />
+      </figure>
+      <div class="about-copy">
+        <p class="eyebrow">A short account</p>
+        <h2 class="display">No single version has the whole story.</h2>
+        <p>
+          Jonathan Lyon is a writer and photographer living in rural Waikato.
+          After years working in advertising in London and New York, his days
+          now move between fatherhood, writing, old machinery, bread, timber,
+          creek water and the slow construction of a cabin.
+        </p>
+        <p>
+          He is also the creator of <em>The Narrative Witness</em>, a literary
+          memoir project exploring adoption, relinquishment, identity, memory
+          and the reclamation of personal authorship.
+        </p>
+        <div class="about-facts">
+          <div>Current work · A book</div>
+          <div>Current structure · A cabin</div>
+          <div>Current fleet · Three tractors</div>
+          <div>Current practice · Paying attention</div>
+        </div>
+        <a class="rule-link" href="https://thenarrativewitness.com">
+          Visit The Narrative Witness <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

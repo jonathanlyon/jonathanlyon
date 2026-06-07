@@ -1,0 +1,78 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import EntryCard from "../../components/EntryCard.astro";
+
+const entries = (await getCollection("journal", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+const formats = [
+  ["all", "Everything"],
+  ["essay", "Essays"],
+  ["field-note", "Field Notes"],
+  ["fragment", "Fragments"],
+  ["photo-story", "Photo Stories"],
+  ["moment", "Moments"],
+];
+---
+
+<BaseLayout
+  title="Journal"
+  description="Essays, field notes, photographs, fragments and moments from Jonathan Lyon."
+  solidHeader
+>
+  <header class="journal-header shell">
+    <p class="eyebrow">Writing · Photography · The material world</p>
+    <h1 class="display">The journal</h1>
+    <div class="filter-row" aria-label="Filter journal entries">
+      {
+        formats.map(([value, label], index) => (
+          <button
+            class="filter-button"
+            type="button"
+            data-filter={value}
+            aria-pressed={index === 0 ? "true" : "false"}
+          >
+            {label}
+          </button>
+        ))
+      }
+    </div>
+  </header>
+  <section class="journal-section shell">
+    <div class="journal-grid" id="journal-grid">
+      {entries.map((entry, index) => <EntryCard entry={entry} index={index} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-format]");
+  const search = new URLSearchParams(window.location.search);
+  const requestedFormat = search.get("format");
+  const requestedTheme = search.get("theme");
+
+  function filterEntries(format: string, theme: string | null = null) {
+    buttons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.filter === format));
+    });
+
+    cards.forEach((card) => {
+      const matchesFormat = format === "all" || card.dataset.format === format;
+      const themes = (card.dataset.themes ?? "").split("|");
+      const matchesTheme = !theme || themes.includes(theme);
+      card.hidden = !(matchesFormat && matchesTheme);
+    });
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => filterEntries(button.dataset.filter ?? "all"));
+  });
+
+  if (requestedFormat && Array.from(buttons).some((button) => button.dataset.filter === requestedFormat)) {
+    filterEntries(requestedFormat);
+  } else if (requestedTheme) {
+    filterEntries("all", requestedTheme);
+  }
+</script>

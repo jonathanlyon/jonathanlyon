@@ -1,0 +1,99 @@
+media:
+  input: public/images
+  output: /images
+
+content:
+  - name: journal
+    label: Journal
+    type: collection
+    path: src/content/journal
+    filename:
+      template: "{year}-{month}-{day}-{primary}.md"
+      field: create
+    view:
+      fields: [cover, title, format, publishedAt, draft]
+      primary: title
+      sort: [publishedAt, title]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: summary
+        label: Summary
+        type: text
+        required: true
+      - name: publishedAt
+        label: Published
+        type: date
+        required: true
+      - name: format
+        label: Form
+        type: select
+        required: true
+        options:
+          values:
+            - name: essay
+              label: Essay
+            - name: field-note
+              label: Field Note
+            - name: fragment
+              label: Fragment
+            - name: photo-story
+              label: Photo Story
+            - name: moment
+              label: Moment
+      - name: themes
+        label: Themes
+        type: string
+        list: true
+      - name: cover
+        label: Cover image
+        type: image
+        required: true
+      - name: coverAlt
+        label: Cover description
+        type: string
+        required: true
+      - name: featured
+        label: Feature on home page
+        type: boolean
+        default: false
+      - name: draft
+        label: Keep as draft
+        type: boolean
+        default: true
+      - name: sample
+        label: Example content
+        type: boolean
+        default: false
+      - name: quote
+        label: Pull quote
+        type: text
+      - name: gallery
+        label: Gallery
+        type: image
+        options:
+          multiple:
+            max: 24
+          unique: true
+          extensions: [jpg, jpeg, png, webp]
+          rename: true
+      - name: videoUrl
+        label: Video URL
+        type: string
+      - name: body
+        label: Entry
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          path: journal
+          rename: true
+          switcher: true
+
+settings:
+  hide: true
