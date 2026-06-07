@@ -1,10 +1,58 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const homeDescription =
+  "Jonathan Lyon is a writer and photographer in Whangaripo Valley, building a cabin, writing The Narrative Witness and keeping a record of a life being made.";
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Jonathan Lyon",
+  url: "https://jonathanlyon.com/",
+  image: "https://jonathanlyon.com/images/jonathan-portrait.jpg",
+  jobTitle: "Writer and photographer",
+  homeLocation: {
+    "@type": "Place",
+    name: "Whangaripo Valley, Aotearoa New Zealand",
+  },
+  sameAs: [
+    "https://jonathanlyon.substack.com",
+    "https://thenarrativewitness.com",
+  ],
+  knowsAbout: [
+    "literary memoir",
+    "photography",
+    "adoption",
+    "relinquishment",
+    "identity",
+    "memory",
+    "writing",
+  ],
+  description: homeDescription,
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Jonathan Lyon",
+  url: "https://jonathanlyon.com/",
+  description: homeDescription,
+  publisher: {
+    "@type": "Person",
+    name: "Jonathan Lyon",
+  },
+};
 ---
 
 <BaseLayout
-  description="Jonathan Lyon is a writer and photographer in Whangaripo Valley, building a cabin, writing The Narrative Witness and keeping a record of a life being made."
-  image="/images/jonathan-portrait.jpg"
+  description={homeDescription}
+  image="/images/journal/reflected-self.jpg"
+  imageAlt="Layered black and white self-portrait by Jonathan Lyon"
+  imageWidth={2400}
+  imageHeight={1599}
+  type="profile"
+  tags={["writer", "photographer", "memoir", "Whangaripo Valley", "The Narrative Witness"]}
+  jsonLd={[personSchema, websiteSchema]}
   solidHeader
 >
   <section class="profile-hero shell">

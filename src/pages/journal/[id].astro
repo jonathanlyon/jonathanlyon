@@ -43,12 +43,54 @@ function getEmbedUrl(url?: string) {
 }
 
 const embedUrl = getEmbedUrl(data.videoUrl);
+const canonicalUrl = new URL(`/journal/${entry.id}/`, Astro.site).toString();
+const imageDimensions: Record<string, { width: number; height: number }> = {
+  "/images/journal/rain-window.jpg": { width: 2400, height: 1599 },
+  "/images/journal/weathered-benches.jpg": { width: 2400, height: 1743 },
+  "/images/journal/cow-parsley.jpg": { width: 2400, height: 1800 },
+  "/images/journal/reflected-self.jpg": { width: 2400, height: 1599 },
+  "/images/journal/long-wharf.jpg": { width: 2400, height: 1599 },
+  "/images/journal/fallen-branch.jpg": { width: 2400, height: 1599 },
+  "/images/journal/wind-trees.jpg": { width: 1800, height: 2400 },
+  "/images/journal/still-water.jpg": { width: 2400, height: 1799 },
+  "/images/jonathan-portrait.jpg": { width: 1800, height: 2400 },
+};
+const coverDimensions = imageDimensions[data.cover] ?? { width: 2400, height: 1599 };
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": data.format === "photo-story" ? "BlogPosting" : "Article",
+  headline: data.title,
+  description: data.summary,
+  image: new URL(data.cover, Astro.site).toString(),
+  datePublished: data.publishedAt.toISOString(),
+  dateModified: data.publishedAt.toISOString(),
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    "@type": "Person",
+    name: "Jonathan Lyon",
+    url: "https://jonathanlyon.com/",
+  },
+  publisher: {
+    "@type": "Person",
+    name: "Jonathan Lyon",
+    url: "https://jonathanlyon.com/",
+  },
+  keywords: data.themes.join(", "),
+};
 ---
 
 <BaseLayout
   title={data.title}
   description={data.summary}
   image={data.cover}
+  imageAlt={data.coverAlt}
+  imageWidth={coverDimensions.width}
+  imageHeight={coverDimensions.height}
+  type="article"
+  publishedTime={data.publishedAt.toISOString()}
+  modifiedTime={data.publishedAt.toISOString()}
+  tags={data.themes}
+  jsonLd={articleSchema}
   solidHeader
 >
   <article>

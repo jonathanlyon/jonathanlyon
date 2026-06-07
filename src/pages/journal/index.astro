@@ -14,11 +14,36 @@ const formats = [
   ["photo-story", "Photo Stories"],
   ["moment", "Moments"],
 ];
+const journalDescription =
+  "Essays, field notes, photographs, fragments and moments from Jonathan Lyon.";
+const journalSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Jonathan Lyon Journal",
+  url: "https://jonathanlyon.com/journal/",
+  description: journalDescription,
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Jonathan Lyon",
+    url: "https://jonathanlyon.com/",
+  },
+  author: {
+    "@type": "Person",
+    name: "Jonathan Lyon",
+    url: "https://jonathanlyon.com/",
+  },
+};
 ---
 
 <BaseLayout
   title="Journal"
-  description="Essays, field notes, photographs, fragments and moments from Jonathan Lyon."
+  description={journalDescription}
+  image="/images/journal/still-water.jpg"
+  imageAlt="Mountains and clouds reflected in still lake water"
+  imageWidth={2400}
+  imageHeight={1799}
+  tags={["journal", "essays", "photography", "field notes", "fragments"]}
+  jsonLd={journalSchema}
   solidHeader
 >
   <header class="journal-header shell">
