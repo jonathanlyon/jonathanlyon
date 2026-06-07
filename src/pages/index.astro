@@ -1,122 +1,145 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import EntryCard from "../components/EntryCard.astro";
-
-const entries = (await getCollection("journal", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
-);
 ---
 
-<BaseLayout>
-  <section class="hero">
-    <img
-      class="hero-image"
-      src="/images/journal/reflected-self.jpg"
-      alt="A layered black and white self-portrait seen through rain and reflections"
-    />
-    <div class="hero-content shell">
-      <div class="hero-copy">
-        <p class="eyebrow">A personal journal from Aotearoa New Zealand</p>
-        <h1 class="display">Jonathan<br />Lyon</h1>
-        <p class="hero-intro">
-          Writer, photographer, father, cabin builder, reluctant mechanic and
-          full-time student of the life that keeps happening between plans.
-        </p>
+<BaseLayout
+  description="Jonathan Lyon is a writer and photographer in rural Waikato, building a cabin, writing The Narrative Witness and keeping a record of a life being made."
+  image="/images/jonathan-portrait.jpg"
+  solidHeader
+>
+  <section class="profile-hero shell">
+    <div class="profile-kicker">
+      <p class="eyebrow">Writer · Photographer · Father · Maker</p>
+    </div>
+    <div class="profile-title">
+      <h1 class="display">Jonathan Lyon</h1>
+      <p>
+        A few lives ago I was working in large advertising agencies in London
+        and New York. Today, I live in rural Waikato, where I am writing a book,
+        building a cabin by hand, attempting to keep old machinery alive and
+        trying to remain faithful to the life unfolding in front of me.
+      </p>
+      <div class="profile-actions">
+        <a class="rule-link" href="https://thenarrativewitness.com">
+          The Narrative Witness <span>↗</span>
+        </a>
+        <a class="rule-link" href="https://jonathanlyon.substack.com">
+          Substack <span>↗</span>
+        </a>
       </div>
-      <div class="hero-foot">
-        <div class="hero-themes">
-          <span>Writing</span>
-          <span>Making</span>
-          <span>Fatherhood</span>
-          <span>Land</span>
-          <span>Photography</span>
-        </div>
-        <a class="rule-link" href="#journal">Enter the journal <span>↓</span></a>
-      </div>
+    </div>
+    <figure class="profile-portrait">
+      <img
+        src="/images/jonathan-portrait.jpg"
+        alt="Black and white portrait of Jonathan Lyon"
+      />
+      <figcaption>
+        <span>Current location</span>
+        <strong>Waikato, Aotearoa New Zealand</strong>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="profile-statement">
+    <div class="profile-statement-inner shell">
+      <p class="eyebrow">The current shape</p>
+      <blockquote>
+        I am interested in the lives we assemble after the original map stops
+        being useful.
+      </blockquote>
+      <p>
+        Writing, photography, fatherhood, land, bread, machinery, weather,
+        memory and the slow construction of shelter. Not separate identities so
+        much as different doors into the same attempt: to become more fully
+        present for the life I have.
+      </p>
     </div>
   </section>
 
-  <section class="manifesto">
-    <div class="manifesto-grid shell">
-      <p class="eyebrow">Many lives, one record</p>
-      <div>
-        <blockquote>
-          A place for the man writing a book, fixing a tractor, building a cabin
-          and trying to be more fully present for the life already here.
-        </blockquote>
-        <p class="manifesto-copy">
-          This is not a record of expertise. It is a record of attention:
-          essays, field notes, photographs, fragments and moments from a life
-          that has taken the long way around.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="journal-section shell" id="journal">
+  <section class="profile-now shell" id="about">
     <div class="section-head">
-      <p class="eyebrow">Recently observed</p>
-      <h2 class="display">From the journal</h2>
+      <p class="eyebrow">At present</p>
+      <h2 class="display">The many hats, mostly literal.</h2>
     </div>
-    <div class="journal-grid">
-      {entries.map((entry, index) => <EntryCard entry={entry} index={index} />)}
-    </div>
-    <div style="margin-top: 4rem; text-align: right;">
-      <a class="rule-link" href="/journal/">View the complete journal <span>→</span></a>
+    <div class="profile-now-grid">
+      <article>
+        <span>01</span>
+        <h3>Writing</h3>
+        <p>
+          I am developing <em>The Narrative Witness</em>, a literary memoir
+          project exploring adoption, relinquishment, identity, memory and
+          authorship.
+        </p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Making</h3>
+        <p>
+          I am building a cabin by hand, learning from timber, water, mud,
+          mistakes and the small honesty of work that leaves evidence.
+        </p>
+      </article>
+      <article>
+        <span>03</span>
+        <h3>Photography</h3>
+        <p>
+          I keep a black-and-white visual record of landscapes, thresholds,
+          weather, traces and the quiet structures that seem to wait for us.
+        </p>
+      </article>
+      <article>
+        <span>04</span>
+        <h3>Ordinary Life</h3>
+        <p>
+          Walking with my daughter, baking bread, hauling water from the creek
+          and trying, imperfectly and daily, to become more myself.
+        </p>
+      </article>
     </div>
   </section>
 
-  <section class="photo-band" id="photography">
+  <section class="profile-image-band" id="photography">
     <img
       src="/images/journal/still-water.jpg"
       alt="Mountains and clouds reflected in still lake water"
       loading="lazy"
     />
-    <div class="photo-band-copy shell">
-      <p class="eyebrow">The photographic record</p>
-      <div>
-        <h2 class="display">Looking is another way of writing things down.</h2>
-        <a class="rule-link" href="/journal/?format=photo-story">
-          View photo stories <span>→</span>
-        </a>
-      </div>
+    <div class="profile-image-copy shell">
+      <p class="eyebrow">Photography</p>
+      <h2 class="display">Looking is another way of writing things down.</h2>
     </div>
   </section>
 
-  <section class="about-section" id="about">
-    <div class="about-grid shell">
-      <figure class="about-portrait">
-        <img
-          src="/images/jonathan-portrait.jpg"
-          alt="Black and white portrait of Jonathan Lyon"
-          loading="lazy"
-        />
-      </figure>
-      <div class="about-copy">
-        <p class="eyebrow">A short account</p>
-        <h2 class="display">No single version has the whole story.</h2>
+  <section class="profile-work shell">
+    <div class="profile-work-intro">
+      <p class="eyebrow">Elsewhere</p>
+      <h2 class="display">Three open doors.</h2>
+    </div>
+    <div class="profile-work-grid">
+      <a href="https://thenarrativewitness.com">
+        <span>The book</span>
+        <strong>The Narrative Witness</strong>
         <p>
-          Jonathan Lyon is a writer and photographer living in rural Waikato.
-          After years working in advertising in London and New York, his days
-          now move between fatherhood, writing, old machinery, bread, timber,
-          creek water and the slow construction of a cabin.
+          The focused pre-launch home for the adoption, relinquishment and
+          literary memoir project.
         </p>
+      </a>
+      <a href="https://jonathanlyon.substack.com">
+        <span>The essays</span>
+        <strong>Substack</strong>
         <p>
-          He is also the creator of <em>The Narrative Witness</em>, a literary
-          memoir project exploring adoption, relinquishment, identity, memory
-          and the reclamation of personal authorship.
+          Longer public writing on adoption, identity, memory, authorship and
+          the work of becoming.
         </p>
-        <div class="about-facts">
-          <div>Current work · A book</div>
-          <div>Current structure · A cabin</div>
-          <div>Current fleet · Three tractors</div>
-          <div>Current practice · Paying attention</div>
-        </div>
-        <a class="rule-link" href="https://thenarrativewitness.com">
-          Visit The Narrative Witness <span>↗</span>
-        </a>
-      </div>
+      </a>
+      <a href="/journal/">
+        <span>The archive</span>
+        <strong>Journal</strong>
+        <p>
+          The future home for field notes, photographs, fragments, moments and
+          ordinary dispatches from the cabin and beyond.
+        </p>
+      </a>
     </div>
   </section>
 </BaseLayout>
