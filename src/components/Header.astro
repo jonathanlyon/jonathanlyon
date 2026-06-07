@@ -43,9 +43,32 @@ const { solid = false } = Astro.props;
   });
 
   nav?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (event) => {
+      const url = new URL(link.href);
+      const isHomeSection =
+        url.origin === window.location.origin &&
+        url.pathname === "/" &&
+        window.location.pathname === "/" &&
+        url.hash.length > 1;
+      const target = isHomeSection
+        ? document.querySelector<HTMLElement>(url.hash)
+        : null;
+
+      if (target) {
+        event.preventDefault();
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        target.scrollIntoView({
+          behavior: reducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+        history.pushState(null, "", url.hash);
+      }
+
       nav.classList.remove("is-open");
       button?.setAttribute("aria-expanded", "false");
+      button?.setAttribute("aria-label", "Open navigation");
+      const icon = button?.querySelector("span");
+      if (icon) icon.textContent = "☰";
     });
   });
 </script>
