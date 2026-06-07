@@ -432,6 +432,20 @@ input {
   font-size: clamp(3.3rem, 7vw, 7.5rem);
 }
 
+.profile-image-link {
+  display: inline-flex;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 2rem;
+  color: inherit;
+  font: 500 0.7rem/1 var(--mono);
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(244, 241, 236, 0.58);
+  padding-bottom: 0.45rem;
+}
+
 .profile-work {
   display: grid;
   grid-template-columns: 0.7fr 1.3fr;
